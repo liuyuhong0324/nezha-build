@@ -29,6 +29,8 @@ jobs:
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh
+        go install github.com/swaggo/swag/cmd/swag@latest
+        swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
         git clone https://github.com/nezhahq/nezha.git
         cd nezha
         go mod tidy -v
