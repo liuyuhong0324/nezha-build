@@ -16,7 +16,7 @@ jobs:
       
     - name: Get version
       id: getver
-      run: echo "::set-output name=body::`echo v0.15.2`"
+      run: echo "::set-output name=body::`echo v0.1`"
 
     - name: Set up Go
       uses: actions/setup-go@v1
