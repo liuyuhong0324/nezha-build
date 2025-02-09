@@ -32,6 +32,8 @@ jobs:
         cd nezha
         chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh
         go install github.com/swaggo/swag/cmd/swag@latest
+        export PATH=$PATH:$(go env GOPATH)/bin
+        source ~/.bashrc
         swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
         go mod tidy -v
         
