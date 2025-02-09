@@ -43,6 +43,7 @@ jobs:
         git clone https://github.com/nezhahq/agent.git
         cd agent
         go mod tidy -v
+        go generate ./...
         CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build cmd/agent/main.go
         mv main agent
         
