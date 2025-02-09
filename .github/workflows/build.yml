@@ -21,17 +21,20 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v1
       with:
-        go-version: "^1.20.0"
+        go-version: "^1.23.0"
         
     - name: Build the nezha-dashboard
       run: |
-        git clone https://github.com/naiba/nezha.git
+        apt update && apt install unzip curl -y
+        wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+        chmod +x /usr/bin/yq
+        chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh
+        git clone https://github.com/nezhahq/nezha.git
         cd nezha
         go mod tidy -v
+        
         CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build cmd/dashboard/main.go
         mv main dashboard
-        CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build cmd/agent/main.go
-        mv main agent
         
     - name: Create Release
       id: create_release
@@ -54,15 +57,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: nezha/dashboard
         asset_name: dashboard
-        asset_content_type: application/octet-stream
-
-    - name: Upload Release agent
-      id: upload-release-agent
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: nezha/agent
-        asset_name: agent
         asset_content_type: application/octet-stream
