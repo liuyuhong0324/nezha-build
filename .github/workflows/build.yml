@@ -30,10 +30,10 @@ jobs:
         sudo chmod +x /usr/bin/yq
         git clone https://github.com/nezhahq/nezha.git
         cd nezha
-        go mod tidy -v
         chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh
         go install github.com/swaggo/swag/cmd/swag@latest
         swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+        go mod tidy -v
         
         CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build cmd/dashboard/main.go
         mv main dashboard
